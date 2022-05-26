@@ -1,22 +1,15 @@
 import { errorMapper } from "./modules/errorMapper";
+import TargetManager from "./target/main";
+import { HoldAborigine } from "./target/holdCreep";
 
 // 游戏入口函数
 export const loop = errorMapper(() => {
-  // 获取采矿机数量
-  const creepsName = Object.keys(Game.creeps);
-  if (creepsName.length <= 8) {
-    Game.spawns["SpawnLocal"].spawnCreep(
-      [WORK, CARRY, MOVE],
-      "采矿机" + Game.time
-    );
-  }
-  // 获取所有采矿机
-  // creepsName.forEach((name) => {
-  //   if (name.indexOf("采矿机") >= 0) {
-  //     const sources = Game.creeps[name].room.find(FIND_SOURCES);
-  //     if (Game.creeps[name].harvest(sources[0]) === ERR_NOT_IN_RANGE) {
-  //       Game.creeps[name].moveTo(sources[0]);
-  //     }
-  //   }
-  // });
+  const targetManager = new TargetManager(Game.rooms["sim"]);
+  const source1 = Game.getObjectById("1b3efea1bed13e03b3a296b3") as Source;
+  const source2 = Game.getObjectById("c7b75c33d68dcd9dfd862643") as Source;
+  const spawn = Game.spawns["Spawn1"];
+  targetManager.add(new HoldAborigine(8, source1, spawn));
+  targetManager.add(new HoldAborigine(14, source2, spawn));
+  targetManager.go();
+  targetManager.creepManager.doWork();
 });

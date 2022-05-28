@@ -29,7 +29,7 @@ export default class TargetManager {
   /**
    * 管理器中的任务，通过add方法进行追加
    */
-  target: Target[] = [];
+  targets: Target[] = [];
 
   /**
    * 新增一个目标，并完成需求检查，如需求检查不通过则不执行
@@ -38,8 +38,11 @@ export default class TargetManager {
   add(target: Target) {
     // 需求检查
     if (target.require(this)) {
-      this.target.push(target);
+      // 添加到目标管理器中
+      this.targets.push(target);
     }
+    // 执行计划检查
+    target.planChange();
     // 返回自身，可以继续调用add方法
     return this;
   }
@@ -48,13 +51,22 @@ export default class TargetManager {
    * 执行目标管理器中的所有任务
    */
   go() {
-    this.target.forEach((task) => {
+    this.targets.forEach((task) => {
       task.doTask();
     });
   }
 }
 
 export abstract class Target {
+  /**
+   * 计划名称，同一个计划名称孵化的工人执行相同的任务
+   */
+  plan: string;
+
+  constructor(plan: string) {
+    this.plan = plan;
+  }
+
   /**
    * 需求检查，返回是否通过的布尔值，展示该目标是否能在现有状况下执行
    */
@@ -64,4 +76,9 @@ export abstract class Target {
    * 执行该任务
    */
   abstract doTask(): void;
+
+  /**
+   * 计划检查，检查计划是否发生变更等等，将发生在需求检查之后，且无论需求检查是否通过
+   */
+  abstract planChange(): void;
 }

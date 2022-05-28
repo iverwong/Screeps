@@ -42,9 +42,7 @@ export default class Aborigine extends C_Creep {
         const freeCapacity = creep.store.getFreeCapacity(RESOURCE_ENERGY);
         // 如果满载，则判断Spawn空余容量
         if (freeCapacity === 0) {
-          const spawn = Game.getObjectById(
-            creep.memory.aborigine.spawn
-          ) as StructureSpawn;
+          const spawn = Game.spawns[creep.memory.aborigine.spawn];
           const spawnFreeCapacity =
             spawn.store.getFreeCapacity(RESOURCE_ENERGY);
           // 如果Spawn也满载，则转移到Build状态
@@ -106,9 +104,7 @@ class Aborigine_MineState extends CreepState {
   doWork(): void {
     const { creep } = this.c_creep;
     // 获取目标spawn
-    const spawn = Game.getObjectById(
-      creep.memory.aborigine.spawn
-    ) as StructureSpawn;
+    const spawn = Game.spawns[creep.memory.aborigine.spawn];
     // 获取目标矿点
     const source = Game.getObjectById(
       creep.memory.aborigine.targetSource

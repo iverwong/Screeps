@@ -32,7 +32,7 @@ export default class CreepManager {
   spawningCreeps: C_Creep[] = [];
 
   /**
-   * 创建一个CreepManager实例，获取该房间的所有Creep及信息
+   * 创建一个CreepManager实例，获取该房间的所有Creep及信息，同时清理Memory中无效的Creep信息
    * @param room 房间名称
    */
   constructor(room: Room) {
@@ -49,6 +49,13 @@ export default class CreepManager {
         this.creeps.push(c_creep);
       }
     });
+    // 清理内存
+    // TODO 在多个房间构造TargetManager时，会实例化多个CreepManager，导致重复清理。建立GlobalContext来管理
+    for (const name in Memory.creeps) {
+      if (!Game.creeps[name]) {
+        delete Memory.creeps[name];
+      }
+    }
   }
 
   /**
@@ -68,6 +75,20 @@ export default class CreepManager {
   getCreepsByType(type: CreepType) {
     if (this.creeps.length > 0)
       return this.creeps.filter((c_creep) => c_creep.getType() === type);
+    return [];
+  }
+
+  /**
+   * 根据plan获取Creeps，无论是否已孵化
+   * @param plan 计划名称
+   * @returns 仅包含某种计划的creep的集合
+   */
+
+  getCreepsByPlan(plan: string) {
+    if (this.creeps.length > 0)
+      return this.creeps.filter(
+        (c_creep) => c_creep.creep.memory.plan === plan
+      );
     return [];
   }
 }

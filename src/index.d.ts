@@ -10,6 +10,11 @@ interface Game {
  */
 interface CreepMemory {
   /**
+   * 记录Creep由哪个维持任务生成，该维持任务的计划名称，孵化时传入
+   */
+  plan: string;
+
+  /**
    * 土著的相关信息
    */
   aborigine?: {
@@ -18,7 +23,7 @@ interface CreepMemory {
      */
     targetSource: string;
     /**
-     * 孵化和存放能量资源的Spawn的id
+     * 孵化和存放能量资源的Spawn的名字
      */
     spawn: string;
     /**

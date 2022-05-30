@@ -8,6 +8,8 @@
 
 import CreepManager from "../c_creeps/main";
 
+// TODO 需要增加一个planList，作用知道与上一次plan的区别，当删除plan的时候，将已没有plan的creep修改为"outOfPlan"
+
 export default class TargetManager {
   /**
    * 目标管理器，对任务计划进行管理
@@ -52,6 +54,8 @@ export default class TargetManager {
    */
   go() {
     this.targets.forEach((task) => {
+      // 执行CreepManager中的行动
+      this.creepManager.doWork();
       task.doTask();
     });
   }
@@ -68,17 +72,18 @@ export abstract class Target {
   }
 
   /**
-   * 需求检查，返回是否通过的布尔值，展示该目标是否能在现有状况下执行
+   * 需求检查，并传入targetManager，用于初始化部分与TargetManager相关的参数
+   * 返回是否通过的布尔值，展示该目标是否能在现有状况下执行
    */
   abstract require(targetManager: TargetManager): boolean;
-
-  /**
-   * 执行该任务
-   */
-  abstract doTask(): void;
 
   /**
    * 计划检查，检查计划是否发生变更等等，将发生在需求检查之后，且无论需求检查是否通过
    */
   abstract planChange(): void;
+
+  /**
+   * 执行该任务
+   */
+  abstract doTask(): void;
 }

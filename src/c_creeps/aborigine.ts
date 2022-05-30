@@ -53,11 +53,10 @@ export default class Aborigine extends C_Creep {
 
         // 如果满载，则判断Spawn空余容量
         if (freeCapacity === 0) {
-          const spawn = Game.spawns[creep.memory.aborigine.spawn];
-          const spawnFreeCapacity =
-            spawn.store.getFreeCapacity(RESOURCE_ENERGY);
-          // 如果Spawn也满载，则转移到Build状态
-          if (spawnFreeCapacity === 0) {
+          // 如果Spawn和Extention也满载，则转移到Build状态
+          if (
+            creep.room.energyCapacityAvailable === creep.room.energyAvailable
+          ) {
             // 查看是否有建筑可建造
             if (!constructionSite) {
               // 无可建造建筑则转移到Upgrade状态
@@ -112,7 +111,7 @@ class Aborigine_MineState extends CreepState {
   /**
    * 挖矿状态
    *
-   * 满载时，返回出生Spawn点进行储存
+   * 满载时，将能源返回至最近的Spawn或Extention进行储存
    * 其余情况会根据memory中的targetSource字段，获取目标矿点，并进行挖矿。
    *
    * @param c_creep C_Creep对象
@@ -123,8 +122,16 @@ class Aborigine_MineState extends CreepState {
   }
   doWork(): void {
     const { creep } = this.c_creep;
-    // 获取目标spawn
-    const spawn = Game.spawns[creep.memory.aborigine.spawn];
+    // 获取最近有空间的储存点
+    const storage = creep.pos.findClosestByRange(FIND_MY_STRUCTURES, {
+      filter: (structure) => {
+        return (
+          (structure.structureType === STRUCTURE_SPAWN ||
+            structure.structureType === STRUCTURE_EXTENSION) &&
+          structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0
+        );
+      },
+    });
     // 获取目标矿点
     const source = Game.getObjectById(
       creep.memory.aborigine.targetSource
@@ -133,9 +140,9 @@ class Aborigine_MineState extends CreepState {
     const freeCapacity = creep.store.getFreeCapacity(RESOURCE_ENERGY);
 
     if (freeCapacity === 0) {
-      // 如果满载，则将能量运回Spawn
-      if (creep.transfer(spawn, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE)
-        creep.moveTo(spawn);
+      // 如果满载，则将能量运回最近的储存点
+      if (creep.transfer(storage, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE)
+        creep.moveTo(storage);
     } else {
       // 否则挖矿
       if (creep.harvest(source) === ERR_NOT_IN_RANGE) creep.moveTo(source);

@@ -73,8 +73,11 @@ export class PassiveRenew extends Target {
         filter: (creep) =>
           creep.ticksToLive <= this.higherThreshold && this.targetCreep(creep),
       });
-      // 更新
-      renewCreeps.forEach((creep) => spawn.renewCreep(creep));
+      // 覆盖移动并更新
+      renewCreeps.forEach((creep) => {
+        creep.moveTo(spawn);
+        spawn.renewCreep(creep);
+      });
 
       // 找到range范围内低于lowerThreshold的，且满足targetCreep条件的creep
       const callCreeps = spawn.pos.findInRange(
@@ -104,6 +107,7 @@ export class PassiveRenew extends Target {
     // 根据spawnCallCreep中的记录，找到需要召回的creep
     Object.keys(spawnCallCreep).forEach((creepName) => {
       // 召回
+      Game.creeps[creepName].say("🔙");
       Game.creeps[creepName].moveTo(spawnCallCreep[creepName].spawn);
     });
   }

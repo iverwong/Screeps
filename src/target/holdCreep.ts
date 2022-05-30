@@ -70,7 +70,7 @@ abstract class HoldTarget extends Target {
 
 export class HoldAborigine extends HoldTarget {
   /**
-   * 土著，在最开始完成基本构造的工人，提供[CARRY,WORK,WORK,MOVE]的身体
+   * 土著，在最开始完成基本构造的工人，提供[CARRY,WORK,MOVE]的身体
    *
    * 工作任务：
    *      1.收集能量资源并建造一个将资源返回至最近的Spawn
@@ -97,7 +97,7 @@ export class HoldAborigine extends HoldTarget {
   doTask(): void {
     // 孵化一个土著
     this.spawn.spawnCreep(
-      [CARRY, WORK, WORK, MOVE],
+      [CARRY, WORK, MOVE],
       CreepType.ABORIGINE + Game.time,
       {
         memory: {

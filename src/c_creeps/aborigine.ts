@@ -6,11 +6,12 @@ export default class Aborigine extends C_Creep {
   creep: Creep;
 
   /**
-   * 土著，在最开始完成基本构造的工人，提供[CARRY,WORK,WORK,MOVE]的能力。主要用于在Spawn周边完成采矿和建造任务。
+   * 土著，在最开始完成基本构造的工人，提供[CARRY,WORK,MOVE]的能力。主要用于在Spawn周边完成采矿、建造和升级任务。
    *
    * 工作任务：
    *      1.收集能量资源并建造一个将资源返回至孵化该土著的Spawn
    *      2.当Spawn能量满时，建造任意类型的结构
+   *      3.如无任何结构可建造，则对房间控制器进行升级
    *
    * @param id creep id
    */
@@ -25,21 +26,31 @@ export default class Aborigine extends C_Creep {
         return new Aborigine_MineState(this);
       case AborigineStateEnum.BUILD:
         return new Aborigine_BuildState(this);
+      case AborigineStateEnum.UPGRADE:
+        return new Aborigine_UpgradeState(this);
     }
   }
 
   changeState(): CreepState {
     const { creep } = this;
+    // 获取creep空余容量
+    const freeCapacity = creep.store.getFreeCapacity(RESOURCE_ENERGY);
+    // 获取最近的可建造的结构
+    const constructionSite = creep.pos.findClosestByRange(
+      FIND_CONSTRUCTION_SITES
+    );
+    // 获取creep空余容量
+    const usedCapacity = creep.store.getUsedCapacity(RESOURCE_ENERGY);
+
     switch (this.state.getEnum()) {
       case AborigineStateEnum.MINE:
         /**
          * 挖矿状态
          *
          * 当满载时，且Spawn已没有储存空间，则转移到Build状态
+         * 如无任何建筑，则转化到Upgrade状态
          */
 
-        // 获取creep空余容量
-        const freeCapacity = creep.store.getFreeCapacity(RESOURCE_ENERGY);
         // 如果满载，则判断Spawn空余容量
         if (freeCapacity === 0) {
           const spawn = Game.spawns[creep.memory.aborigine.spawn];
@@ -47,7 +58,13 @@ export default class Aborigine extends C_Creep {
             spawn.store.getFreeCapacity(RESOURCE_ENERGY);
           // 如果Spawn也满载，则转移到Build状态
           if (spawnFreeCapacity === 0) {
-            return new Aborigine_BuildState(this);
+            // 查看是否有建筑可建造
+            if (!constructionSite) {
+              // 无可建造建筑则转移到Upgrade状态
+              return new Aborigine_UpgradeState(this);
+            }
+            // 否则转移到Build状态
+            else return new Aborigine_BuildState(this);
           }
         }
         return this.state;
@@ -57,18 +74,20 @@ export default class Aborigine extends C_Creep {
          *
          * 当空载时，或周围无建造目标时，直接转移到Mine状态
          */
-        const constructionSite = creep.pos.findClosestByRange(
-          FIND_CONSTRUCTION_SITES
-        );
-
-        // 获取creep空余容量
-        const usedCapacity = creep.store.getUsedCapacity(RESOURCE_ENERGY);
 
         // 如果空载或无建造目标时，则转移到Mine状态
         if (usedCapacity === 0 || constructionSite === null) {
           return new Aborigine_MineState(this);
         }
         return this.state;
+
+      case AborigineStateEnum.UPGRADE:
+        /**
+         * 升级状态
+         *
+         * 当空载时，转移到Mine状态
+         */
+        if (usedCapacity === 0) return new Aborigine_MineState(this);
     }
   }
 
@@ -84,6 +103,7 @@ export default class Aborigine extends C_Creep {
 export enum AborigineStateEnum {
   MINE,
   BUILD,
+  UPGRADE,
 }
 
 class Aborigine_MineState extends CreepState {
@@ -152,5 +172,31 @@ class Aborigine_BuildState extends CreepState {
     );
     if (creep.build(constructionSite) === ERR_NOT_IN_RANGE)
       creep.moveTo(constructionSite);
+  }
+}
+
+class Aborigine_UpgradeState extends CreepState {
+  c_creep: C_Creep;
+
+  /**
+   * 升级状态
+   *
+   * 对所在房间的房间控制器进行升级
+   *
+   * @param c_creep C_Creep对象
+   */
+  constructor(c_creep: C_Creep) {
+    super();
+    this.c_creep = c_creep;
+  }
+
+  doWork(): void {
+    const creep = this.c_creep.creep;
+    const roomController = creep.room.controller;
+    if (creep.upgradeController(roomController) === ERR_NOT_IN_RANGE)
+      creep.moveTo(roomController);
+  }
+  getEnum(): number {
+    return AborigineStateEnum.UPGRADE;
   }
 }

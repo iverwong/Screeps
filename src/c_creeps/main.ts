@@ -11,6 +11,8 @@ import _ from "lodash";
 import Miner from "./miner";
 import Aborigine from "./aborigine";
 import { C_Creep, CreepType } from "./types";
+import Upgrader from "./upgrader";
+import Carrier from "./carrier";
 
 /**
  * creep管理器，负责管理所有creep，并提供统计数据
@@ -98,5 +100,9 @@ const creepFactory = (name: string) => {
       Game.creeps[name].id,
       Game.creeps[name].memory.miner.targetSource
     );
+  else if (name.startsWith(CreepType.UPGRADER))
+    return new Upgrader(Game.creeps[name].id);
+  else if (name.startsWith(CreepType.CARRIER))
+    return new Carrier(Game.creeps[name].id);
   return null;
 };

@@ -1,6 +1,11 @@
 import { errorMapper } from "./modules/errorMapper";
 import TargetManager from "./target/main";
-import { HoldAborigine, HoldCarrier, HoldMiner } from "./target/holdCreep";
+import {
+  HoldAborigine,
+  HoldCarrier,
+  HoldMiner,
+  HoldUpgrader,
+} from "./target/holdCreep";
 import { PassiveRenew } from "./target/renewCreep";
 import GlobalContext from "./global/context";
 
@@ -21,8 +26,8 @@ export const loop = errorMapper(() => {
   const spawn = Game.spawns["BaseSpawn"];
 
   // 工人维持
-  targetManager.add(new HoldAborigine("ab1", spawn, 3, topRightSource));
-  targetManager.add(new HoldAborigine("ab2", spawn, 3, downSource));
+  // targetManager.add(new HoldAborigine("ab1", spawn, 3, topRightSource));
+  // targetManager.add(new HoldAborigine("ab2", spawn, 3, downSource));
   targetManager.add(
     new HoldMiner(
       "mi1",
@@ -41,9 +46,33 @@ export const loop = errorMapper(() => {
       new RoomPosition(22, 36, "E13S46")
     )
   );
-  // targetManager.add(
-  //   new HoldCarrier("ca1", spawn, 1, "62957b298e48e0be8991fdfb", "")
-  // );
+  targetManager.add(
+    new HoldCarrier(
+      "ca1",
+      spawn,
+      1,
+      "62957b298e48e0be8991fdfb",
+      "6295e6770ee6fc521ea5a552"
+    )
+  );
+  targetManager.add(
+    new HoldCarrier(
+      "ca2",
+      spawn,
+      1,
+      "62957b31f07f19994a2f6b14",
+      "6295e6770ee6fc521ea5a552"
+    )
+  );
+  targetManager.add(
+    new HoldUpgrader(
+      "up1",
+      spawn,
+      1,
+      "6295e6770ee6fc521ea5a552",
+      new RoomPosition(28, 26, "E13S46")
+    )
+  );
   // Creep被动召回更新
   targetManager.add(
     new PassiveRenew("renew", [spawn], undefined, undefined, 12)

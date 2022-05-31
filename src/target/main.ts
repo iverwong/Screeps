@@ -8,8 +8,6 @@
 
 import CreepManager from "../c_creeps/main";
 
-// TODO 需要增加一个planList，作用知道与上一次plan的区别，当删除plan的时候，将已没有plan的creep修改为"outOfPlan"
-
 export default class TargetManager {
   /**
    * 目标管理器，对任务计划进行管理

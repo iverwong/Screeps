@@ -205,7 +205,7 @@ export class HoldCarrier extends HoldTarget {
   body: BodyPartConstant[] = [];
 
   /**
-   * 运输，完成顶点运输任务，当孵化池不满时，填充孵化池
+   * 运输，完成定点运输任务，当孵化池不满时，填充孵化池
    *
    * @param plan 计划名称
    * @param spawn 孵化的Spawn
@@ -261,10 +261,21 @@ export class HoldCarrier extends HoldTarget {
 }
 
 export class HoldUpgrader extends HoldTarget {
-  body: BodyPartConstant[];
+  body: BodyPartConstant[] = [];
   input: string;
   position: RoomPosition;
 
+  /**
+   * 升级，完成定点升级任务
+   *
+   * @param plan 计划名称
+   * @param spawn 用于孵化的spawn
+   * @param holdNumber 维持数量
+   * @param input 能量来源
+   * @param position 工作位置
+   * @param bodyMove move部件数量
+   * @param bodyWork work部件数量
+   */
   constructor(
     plan: string,
     spawn: StructureSpawn,

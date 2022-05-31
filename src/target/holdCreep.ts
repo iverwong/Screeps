@@ -7,6 +7,7 @@ import { AborigineStateEnum } from "../c_creeps/aborigine";
 import TargetManager, { Target } from "./main";
 import { MinerStateEnum } from "@/c_creeps/miner";
 import { CarrierStateEnum } from "@/c_creeps/carrier";
+import { UpgraderStateEnum } from "@/c_creeps/upgrader";
 
 abstract class HoldTarget extends Target {
   /**
@@ -253,6 +254,60 @@ export class HoldCarrier extends HoldTarget {
           input: this.input,
           output: this.output,
           state: CarrierStateEnum.GET,
+        },
+      },
+    });
+  }
+}
+
+export class HoldUpgrader extends HoldTarget {
+  body: BodyPartConstant[];
+  input: string;
+  position: RoomPosition;
+
+  constructor(
+    plan: string,
+    spawn: StructureSpawn,
+    holdNumber: number,
+    input: string,
+    position: RoomPosition,
+    bodyMove: number = 2,
+    bodyWork: number = 4
+  ) {
+    super(plan, spawn, holdNumber);
+    this.input = input;
+    this.position = position;
+    for (let index = 0; index < bodyWork; index++) {
+      this.body.push(WORK);
+    }
+    for (let index = 0; index < bodyMove; index++) {
+      this.body.push(MOVE);
+    }
+  }
+  planChange(): void {
+    super.planChange();
+    const c_creeps = this.planCreeps;
+    c_creeps.forEach((c_creep) => {
+      c_creep.creep.memory.upgrader.input = this.input;
+      c_creep.creep.memory.upgrader.positionRoom = this.position.roomName;
+      c_creep.creep.memory.upgrader.positionX = this.position.x;
+      c_creep.creep.memory.upgrader.positionY = this.position.y;
+    });
+  }
+
+  doTask(): void {
+    /**
+     * 维持孵化升级工人
+     */
+    this.spawn.spawnCreep(this.body, CreepType.UPGRADER + Game.time, {
+      memory: {
+        plan: this.plan,
+        upgrader: {
+          input: this.input,
+          positionX: this.position.x,
+          positionY: this.position.y,
+          positionRoom: this.position.roomName,
+          state: UpgraderStateEnum.GET,
         },
       },
     });

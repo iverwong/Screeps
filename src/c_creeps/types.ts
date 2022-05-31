@@ -10,6 +10,7 @@ export enum CreepType {
   ABORIGINE = "aborigine",
   MINER = "miner",
   CARRIER = "carrier",
+  UPGRADER = "upgrader",
 }
 
 /**

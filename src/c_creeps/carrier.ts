@@ -1,10 +1,9 @@
-/**
- * 搬运，负责定点搬运和转运能量
- */
-
 import { CreepState, CreepType, C_Creep } from "./types";
 
 export default class Carrier extends C_Creep {
+  /**
+   * 搬运，负责定点搬运和转运能量
+   */
   constructor(id: string) {
     super(id);
   }

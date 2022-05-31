@@ -87,6 +87,7 @@ export default class Aborigine extends C_Creep {
          * 当空载时，转移到Mine状态
          */
         if (usedCapacity === 0) return new Aborigine_MineState(this);
+        return this.state;
     }
   }
 

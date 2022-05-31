@@ -42,6 +42,7 @@ export default class Miner extends C_Creep {
         if (creep.ticksToLive >= 200) {
           return new Miner_MineState(this);
         }
+        return this.state;
     }
   }
   getCreepTypeState(): CreepState {

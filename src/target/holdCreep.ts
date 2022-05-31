@@ -6,6 +6,7 @@ import { CreepType, C_Creep } from "../c_creeps/types";
 import { AborigineStateEnum } from "../c_creeps/aborigine";
 import TargetManager, { Target } from "./main";
 import { MinerStateEnum } from "@/c_creeps/miner";
+import { CarrierStateEnum } from "@/c_creeps/carrier";
 
 abstract class HoldTarget extends Target {
   /**
@@ -157,21 +158,65 @@ export class HoldMiner extends HoldTarget {
 
   doTask(): void {
     // 孵化一个矿工
-    if (
-      this.spawn.spawnCreep(this.body, CreepType.MINER + Game.time, {
-        memory: {
-          plan: this.plan,
-          miner: {
-            targetSource: this.source.id,
-            positionX: this.position.x,
-            positionY: this.position.y,
-            state: MinerStateEnum.MINE,
-          },
+    this.spawn.spawnCreep(this.body, CreepType.MINER + Game.time, {
+      memory: {
+        plan: this.plan,
+        miner: {
+          targetSource: this.source.id,
+          positionX: this.position.x,
+          positionY: this.position.y,
+          state: MinerStateEnum.MINE,
         },
-      }) === ERR_NOT_ENOUGH_ENERGY
-    )
-      throw new Error(
-        `房间${this.spawn.room.name}中的${this.spawn.name}无法孵化这种类型的矿工`
-      );
+      },
+    });
+  }
+}
+
+export class HoldCarrier extends HoldTarget {
+  input: string;
+  output: string;
+  body: BodyPartConstant[] = [];
+
+  /**
+   * 运输，完成顶点运输任务，当孵化池不满时，填充孵化池
+   *
+   * @param plan 计划名称
+   * @param spawn 孵化的Spawn
+   * @param holdNumber 维持数量
+   * @param input 能量供给侧id
+   * @param output 能量消耗侧id
+   * @param bodyNumber 身体包含多少对[CARRY,MOVE]，默认为5
+   */
+  constructor(
+    plan: string,
+    spawn: StructureSpawn,
+    holdNumber: number,
+    input: string,
+    output: string,
+    bodyNumber: number = 5
+  ) {
+    super(plan, spawn, holdNumber);
+    this.input = input;
+    this.output = output;
+    for (let index = 0; index < bodyNumber; index++) {
+      this.body.push(CARRY);
+    }
+    for (let index = 0; index < bodyNumber; index++) {
+      this.body.push(MOVE);
+    }
+  }
+
+  doTask(): void {
+    // 孵化一个运输
+    this.spawn.spawnCreep(this.body, CreepType.CARRIER + Game.time, {
+      memory: {
+        plan: this.plan,
+        carrier: {
+          input: this.input,
+          output: this.output,
+          state: CarrierStateEnum.GET,
+        },
+      },
+    });
   }
 }

@@ -49,4 +49,21 @@ interface CreepMemory {
      */
     state: number;
   };
+  /**
+   * 搬运的相关信息
+   */
+  carrier?: {
+    /**
+     * 能源供给侧id
+     */
+    input: string;
+    /**
+     * 能源消耗侧id
+     */
+    output: string;
+    /**
+     * 当前状态机的状态编号，通过矿工状态机编号，反向映射到状态机枚举
+     */
+    state: number;
+  };
 }

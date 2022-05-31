@@ -49,13 +49,6 @@ export default class CreepManager {
         this.creeps.push(c_creep);
       }
     });
-    // 清理内存
-    // TODO 在多个房间构造TargetManager时，会实例化多个CreepManager，导致重复清理。建立GlobalContext来管理
-    for (const name in Memory.creeps) {
-      if (!Game.creeps[name]) {
-        delete Memory.creeps[name];
-      }
-    }
   }
 
   /**

@@ -13,6 +13,7 @@ import Aborigine from "./aborigine";
 import { C_Creep, CreepType } from "./types";
 import Upgrader from "./upgrader";
 import Carrier from "./carrier";
+import Builder from "./builder";
 
 /**
  * creep管理器，负责管理所有creep，并提供统计数据
@@ -104,5 +105,7 @@ const creepFactory = (name: string) => {
     return new Upgrader(Game.creeps[name].id);
   else if (name.startsWith(CreepType.CARRIER))
     return new Carrier(Game.creeps[name].id);
+  else if (name.startsWith(CreepType.BUILDER))
+    return new Builder(Game.creeps[name].id);
   return null;
 };

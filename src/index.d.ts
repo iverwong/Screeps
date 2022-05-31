@@ -102,4 +102,18 @@ interface CreepMemory {
      */
     state: number;
   };
+  builder?: {
+    /**
+     * 能量获取点的id
+     */
+    input: string;
+    /**
+     * 任务目标对象id
+     */
+    task: string;
+    /**
+     * 当前状态机的状态编号，通过矿工状态机编号，反向映射到状态机枚举
+     */
+    state: number;
+  };
 }

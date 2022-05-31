@@ -15,9 +15,6 @@ export default class TaskManager {
       this.task = [];
       this.checkPublish();
       this.room.memory.tasks = this.task;
-    } else {
-      // 在未更新任务时，从内存中获取
-      this.task = this.room.memory.tasks;
     }
   }
 
@@ -46,9 +43,10 @@ export default class TaskManager {
    * 获取一个任务
    * @returns 返回需要处理的对象id
    */
-  getTask() {
-    const task = this.task.pop();
-    this.room.memory.tasks = this.task;
+  static getTask(room: Room) {
+    const tasks = room.memory.tasks;
+    const task = tasks.pop();
+    room.memory.tasks = tasks;
     return task;
   }
 }

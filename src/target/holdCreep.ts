@@ -8,6 +8,7 @@ import TargetManager, { Target } from "./main";
 import { MinerStateEnum } from "@/c_creeps/miner";
 import { CarrierStateEnum } from "@/c_creeps/carrier";
 import { UpgraderStateEnum } from "@/c_creeps/upgrader";
+import { BuilderStateEnum } from "@/c_creeps/builder";
 
 abstract class HoldTarget extends Target {
   /**
@@ -291,10 +292,10 @@ export class HoldUpgrader extends HoldTarget {
     for (let index = 0; index < bodyWork; index++) {
       this.body.push(WORK);
     }
+    this.body.push(CARRY);
     for (let index = 0; index < bodyMove; index++) {
       this.body.push(MOVE);
     }
-    this.body.push(CARRY);
   }
   planChange(): void {
     super.planChange();
@@ -320,6 +321,56 @@ export class HoldUpgrader extends HoldTarget {
           positionY: this.position.y,
           positionRoom: this.position.roomName,
           state: UpgraderStateEnum.GET,
+        },
+      },
+    });
+  }
+}
+
+export class HoldBuilder extends HoldTarget {
+  body: BodyPartConstant[] = [];
+  input: string;
+
+  constructor(
+    plan: string,
+    spawn: StructureSpawn,
+    holdNumber: number,
+    input: string,
+    bodyMove: number = 4,
+    bodyWork: number = 2,
+    bodyCarry: number = 2
+  ) {
+    super(plan, spawn, holdNumber);
+    this.input = input;
+    for (let index = 0; index < bodyWork; index++) {
+      this.body.push(WORK);
+    }
+    for (let index = 0; index < bodyCarry; index++) {
+      this.body.push(CARRY);
+    }
+    for (let index = 0; index < bodyMove; index++) {
+      this.body.push(MOVE);
+    }
+  }
+  planChange(): void {
+    super.planChange();
+    const c_creeps = this.planCreeps;
+    c_creeps.forEach((c_creep) => {
+      c_creep.creep.memory.builder.input = this.input;
+    });
+  }
+
+  doTask(): void {
+    /**
+     * 维持孵化建造
+     */
+    this.spawn.spawnCreep(this.body, CreepType.BUILDER + Game.time, {
+      memory: {
+        plan: this.plan,
+        builder: {
+          input: this.input,
+          task: null,
+          state: BuilderStateEnum.GET,
         },
       },
     });

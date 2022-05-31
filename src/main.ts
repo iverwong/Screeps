@@ -2,6 +2,7 @@ import { errorMapper } from "./modules/errorMapper";
 import TargetManager from "./target/main";
 import {
   HoldAborigine,
+  HoldBuilder,
   HoldCarrier,
   HoldMiner,
   HoldUpgrader,
@@ -89,7 +90,8 @@ export const loop = errorMapper(() => {
         "6295e6770ee6fc521ea5a552",
         new RoomPosition(28, 25, "E13S46")
       )
-    );
+    )
+    .add(new HoldBuilder("bu1", spawn, 2, "6295e6770ee6fc521ea5a552"));
   // Creep被动召回更新
   targetManager.add(new PassiveRenew("renew", [spawn]));
   targetManager.go();

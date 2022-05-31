@@ -39,7 +39,7 @@ export default class Miner extends C_Creep {
          *
          * 当自身生命被更新至1200时，切换到挖矿状态
          */
-        if (creep.ticksToLive >= 200) {
+        if (creep.ticksToLive >= 1200) {
           return new Miner_MineState(this);
         }
         return this.state;

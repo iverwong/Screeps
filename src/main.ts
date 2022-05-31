@@ -1,6 +1,6 @@
 import { errorMapper } from "./modules/errorMapper";
 import TargetManager from "./target/main";
-import { HoldAborigine, HoldMiner } from "./target/holdCreep";
+import { HoldAborigine, HoldCarrier, HoldMiner } from "./target/holdCreep";
 import { PassiveRenew } from "./target/renewCreep";
 import GlobalContext from "./global/context";
 
@@ -41,6 +41,9 @@ export const loop = errorMapper(() => {
       new RoomPosition(22, 36, "E13S46")
     )
   );
+  // targetManager.add(
+  //   new HoldCarrier("ca1", spawn, 1, "62957b298e48e0be8991fdfb", "")
+  // );
   // Creep被动召回更新
   targetManager.add(
     new PassiveRenew("renew", [spawn], undefined, undefined, 12)

@@ -294,6 +294,7 @@ export class HoldUpgrader extends HoldTarget {
     for (let index = 0; index < bodyMove; index++) {
       this.body.push(MOVE);
     }
+    this.body.push(CARRY);
   }
   planChange(): void {
     super.planChange();

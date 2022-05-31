@@ -58,9 +58,13 @@ export default class Carrier extends C_Creep {
          * 运输状态
          *
          * 如果自身空了，则转换到获取能量状态
+         * 如果孵化吃有空间，则转换到筑巢状态
          */
         if (usedCapacity === 0) {
           return new Carrier_GetState(this);
+        }
+        if (creep.room.energyCapacityAvailable !== creep.room.energyAvailable) {
+          return new Carrier_NestState(this);
         }
         return this.state;
     }

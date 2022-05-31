@@ -66,7 +66,15 @@ export default class Carrier extends C_Creep {
     }
   }
   getCreepTypeState(): CreepState {
-    throw new Error("Method not implemented.");
+    const creep = this.creep;
+    switch (creep.memory.carrier.state) {
+      case CarrierStateEnum.CARRY:
+        return new Carrier_CarryState(this);
+      case CarrierStateEnum.GET:
+        return new Carrier_GetState(this);
+      case CarrierStateEnum.NEST:
+        return new Carrier_NestState(this);
+    }
   }
   getType(): CreepType {
     return CreepType.CARRIER;

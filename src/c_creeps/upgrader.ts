@@ -44,10 +44,16 @@ export default class Upgrader extends C_Creep {
     }
   }
   getCreepTypeState(): CreepState {
-    throw new Error("Method not implemented.");
+    const creep = this.creep;
+    switch (creep.memory.upgrader.state) {
+      case UpgraderStateEnum.GET:
+        return new Upgrader_GetState(this);
+      case UpgraderStateEnum.UPGRADE:
+        return new Upgrader_UpgradeState(this);
+    }
   }
   getType(): CreepType {
-    throw new Error("Method not implemented.");
+    return CreepType.UPGRADER;
   }
 }
 

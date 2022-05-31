@@ -23,11 +23,29 @@ interface CreepMemory {
      */
     targetSource: string;
     /**
-     * 孵化和存放能量资源的Spawn的名字
-     */
-    spawn: string;
-    /**
      * 当前状态机的状态编号，通过土著状态机编号，反向映射到状态机枚举
+     */
+    state: number;
+  };
+
+  /**
+   * 矿工的相关信息
+   */
+  miner?: {
+    /**
+     * 目标矿点的id
+     */
+    targetSource: string;
+    /**
+     * 工作位置X
+     */
+    positionX: number;
+    /**
+     * 工作位置Y
+     */
+    positionY: number;
+    /**
+     * 当前状态机的状态编号，通过矿工状态机编号，反向映射到状态机枚举
      */
     state: number;
   };

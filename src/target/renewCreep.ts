@@ -2,6 +2,7 @@
  * 更新相关，为Creep提供主动和被动更新的方法
  */
 
+import { CreepType } from "@/c_creeps/types";
 import main, { Target } from "./main";
 
 export class PassiveRenew extends Target {
@@ -19,6 +20,7 @@ export class PassiveRenew extends Target {
    * @param lowerThreshold 该阈值表示低于或等于该阈值的Creep将等待被更新，即便该Spawn没有足够的能量或正在孵化中，默认为200
    * @param lowerRange 表示等待更新的范围，即如果Spawn周边范围内有低于或等于lowerThreshold的Creep，则主动将该Creep找回到Spawn身边，完成更新
    * @param targetCreep 目标Creep，默认为所有非“outOfPlan”且没有状态的Creep，该值接收一个函数，通过布尔值确定该Creep应不应该被升级
+   * 同时，以下工人类型将自行主动更新：Miner
    */
   constructor(
     plan: string,
@@ -27,7 +29,9 @@ export class PassiveRenew extends Target {
     lowerThreshold: number = 200,
     lowerRange: number = 8,
     targetCreep: (creep: Creep) => boolean = (creep: Creep) =>
-      creep.memory.plan !== "outOfPlan" && !creep.effects
+      creep.memory.plan !== "outOfPlan" &&
+      !creep.effects &&
+      !creep.name.startsWith(CreepType.MINER)
   ) {
     super(plan);
     this.spawns = spawns;

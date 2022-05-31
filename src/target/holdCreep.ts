@@ -5,6 +5,7 @@
 import { CreepType, C_Creep } from "../c_creeps/types";
 import { AborigineStateEnum } from "../c_creeps/aborigine";
 import TargetManager, { Target } from "./main";
+import { MinerStateEnum } from "@/c_creeps/miner";
 
 abstract class HoldTarget extends Target {
   /**
@@ -104,11 +105,73 @@ export class HoldAborigine extends HoldTarget {
           plan: this.plan,
           aborigine: {
             targetSource: this.source.id,
-            spawn: this.spawn.name,
             state: AborigineStateEnum.MINE,
           },
         },
       }
     );
+  }
+}
+
+export class HoldMiner extends HoldTarget {
+  /**
+   * 矿工工作的目标矿场
+   */
+  source: Source;
+  /**
+   * 矿工工作位置，该位置需包含一个container建筑
+   */
+  position: RoomPosition;
+  /**
+   * 矿工的身体组成
+   */
+  body: BodyPartConstant[] = [];
+  /**
+   * 矿工，在固定位置完成采矿任务，在闲时
+   *
+   * @param plan
+   * @param spawn
+   * @param holdNumber
+   * @param source
+   * @param position
+   */
+  constructor(
+    plan: string,
+    spawn: StructureSpawn,
+    holdNumber: number,
+    source: Source,
+    position: RoomPosition,
+    bodyMove: number = 2,
+    bodyWork: number = 4
+  ) {
+    super(plan, spawn, holdNumber);
+    this.source = source;
+    this.position = position;
+    for (let index = 0; index < bodyWork; index++) {
+      this.body.push(WORK);
+    }
+    for (let index = 0; index < bodyMove; index++) {
+      this.body.push(MOVE);
+    }
+  }
+
+  doTask(): void {
+    // 孵化一个矿工
+    if (
+      this.spawn.spawnCreep(this.body, CreepType.MINER + Game.time, {
+        memory: {
+          plan: this.plan,
+          miner: {
+            targetSource: this.source.id,
+            positionX: this.position.x,
+            positionY: this.position.y,
+            state: MinerStateEnum.MINE,
+          },
+        },
+      }) === ERR_NOT_ENOUGH_ENERGY
+    )
+      throw new Error(
+        `房间${this.spawn.room.name}中的${this.spawn.name}无法孵化这种类型的矿工`
+      );
   }
 }

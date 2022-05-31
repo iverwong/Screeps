@@ -1,6 +1,6 @@
 import { errorMapper } from "./modules/errorMapper";
 import TargetManager from "./target/main";
-import { HoldAborigine } from "./target/holdCreep";
+import { HoldAborigine, HoldMiner } from "./target/holdCreep";
 import { PassiveRenew } from "./target/renewCreep";
 import GlobalContext from "./global/context";
 
@@ -20,9 +20,28 @@ export const loop = errorMapper(() => {
   // 记录房间内spawn
   const spawn = Game.spawns["BaseSpawn"];
 
-  // 目标管理器
-  targetManager.add(new HoldAborigine("ab1", spawn, 5, topRightSource));
-  targetManager.add(new HoldAborigine("ab2", spawn, 5, downSource));
+  // 工人维持
+  targetManager.add(new HoldAborigine("ab1", spawn, 3, topRightSource));
+  targetManager.add(new HoldAborigine("ab2", spawn, 3, downSource));
+  targetManager.add(
+    new HoldMiner(
+      "mi1",
+      spawn,
+      1,
+      topRightSource,
+      new RoomPosition(34, 17, "E13S46")
+    )
+  );
+  targetManager.add(
+    new HoldMiner(
+      "mi2",
+      spawn,
+      1,
+      downSource,
+      new RoomPosition(22, 36, "E13S46")
+    )
+  );
+  // Creep被动召回更新
   targetManager.add(
     new PassiveRenew("renew", [spawn], undefined, undefined, 12)
   );

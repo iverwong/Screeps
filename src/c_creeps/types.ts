@@ -9,7 +9,6 @@
 export enum CreepType {
   ABORIGINE = "aborigine",
   MINER = "miner",
-  CARRIER = "carrier",
 }
 
 /**
@@ -61,10 +60,16 @@ export abstract class C_Creep {
   abstract getType(): CreepType;
 }
 
-/**
- * Creep状态机抽象类
- */
 export abstract class CreepState {
+  c_creep: C_Creep;
+  /**
+   * Creep状态机抽象类
+   * @param c_creep C_Creep对象
+   */
+  constructor(c_creep: C_Creep) {
+    this.c_creep = c_creep;
+  }
+
   /**
    * 执行在当前状态下的doWork操作
    */

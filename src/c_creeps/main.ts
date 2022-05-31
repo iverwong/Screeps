@@ -94,6 +94,9 @@ const creepFactory = (name: string) => {
   if (name.startsWith(CreepType.ABORIGINE))
     return new Aborigine(Game.creeps[name].id);
   else if (name.startsWith(CreepType.MINER))
-    return new Miner(Game.creeps[name].id);
+    return new Miner(
+      Game.creeps[name].id,
+      Game.creeps[name].memory.miner.targetSource
+    );
   return null;
 };

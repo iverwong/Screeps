@@ -117,8 +117,7 @@ class Aborigine_MineState extends CreepState {
    * @param c_creep C_Creep对象
    */
   constructor(c_creep: C_Creep) {
-    super();
-    this.c_creep = c_creep;
+    super(c_creep);
   }
   doWork(): void {
     const { creep } = this.c_creep;
@@ -164,8 +163,7 @@ class Aborigine_BuildState extends CreepState {
    * @param c_creep C_Creep对象
    */
   constructor(c_creep: C_Creep) {
-    super();
-    this.c_creep = c_creep;
+    super(c_creep);
   }
 
   getEnum(): number {
@@ -193,8 +191,7 @@ class Aborigine_UpgradeState extends CreepState {
    * @param c_creep C_Creep对象
    */
   constructor(c_creep: C_Creep) {
-    super();
-    this.c_creep = c_creep;
+    super(c_creep);
   }
 
   doWork(): void {

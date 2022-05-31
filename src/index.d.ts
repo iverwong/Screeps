@@ -6,6 +6,13 @@ interface Game {
 }
 
 /**
+ * 提供RoomMemory的接口支持
+ */
+interface RoomMemory {
+  tasks: string[];
+}
+
+/**
  * 提供CreepMemory的接口支持
  */
 interface CreepMemory {

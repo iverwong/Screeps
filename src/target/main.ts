@@ -6,6 +6,7 @@
  *
  */
 
+import TaskManager from "@/task/taskManager";
 import CreepManager from "../c_creeps/main";
 
 export default class TargetManager {
@@ -16,6 +17,7 @@ export default class TargetManager {
   constructor(room: Room) {
     this.room = room;
     this.creepManager = new CreepManager(room);
+    this.taskManager = new TaskManager(room);
   }
 
   /**
@@ -26,6 +28,10 @@ export default class TargetManager {
    * 该房间所对应的creep管理器
    */
   creepManager: CreepManager;
+  /**
+   * 该房间所对应的任务管理器
+   */
+  taskManager: TaskManager;
   /**
    * 管理器中的任务，通过add方法进行追加
    */

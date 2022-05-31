@@ -45,6 +45,10 @@ interface CreepMemory {
      */
     positionY: number;
     /**
+     * 工作位置的房间名称
+     */
+    positionRoom: string;
+    /**
      * 当前状态机的状态编号，通过矿工状态机编号，反向映射到状态机枚举
      */
     state: number;

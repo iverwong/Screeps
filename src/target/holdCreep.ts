@@ -96,6 +96,17 @@ export class HoldAborigine extends HoldTarget {
    */
   source: Source;
 
+  /**
+   * 土著工作的目标矿场发生变更时，更新内存中矿场的id
+   */
+  planChange(): void {
+    super.planChange();
+    const c_creeps = this.planCreeps;
+    c_creeps.forEach((c_creep) => {
+      c_creep.creep.memory.aborigine.targetSource = this.source.id;
+    });
+  }
+
   doTask(): void {
     // 孵化一个土著
     this.spawn.spawnCreep(
@@ -156,6 +167,20 @@ export class HoldMiner extends HoldTarget {
     }
   }
 
+  /**
+   * 矿工计划发生变更时，更新内存中矿场的id和位置
+   */
+  planChange(): void {
+    super.planChange();
+    const c_creeps = this.planCreeps;
+    c_creeps.forEach((c_creep) => {
+      c_creep.creep.memory.miner.targetSource = this.source.id;
+      c_creep.creep.memory.miner.positionRoom = this.position.roomName;
+      c_creep.creep.memory.miner.positionX = this.position.x;
+      c_creep.creep.memory.miner.positionY = this.position.y;
+    });
+  }
+
   doTask(): void {
     // 孵化一个矿工
     this.spawn.spawnCreep(this.body, CreepType.MINER + Game.time, {
@@ -165,6 +190,7 @@ export class HoldMiner extends HoldTarget {
           targetSource: this.source.id,
           positionX: this.position.x,
           positionY: this.position.y,
+          positionRoom: this.position.roomName,
           state: MinerStateEnum.MINE,
         },
       },
@@ -204,6 +230,18 @@ export class HoldCarrier extends HoldTarget {
     for (let index = 0; index < bodyNumber; index++) {
       this.body.push(MOVE);
     }
+  }
+
+  /**
+   * 当计划发生变更时，更新运输工人的input和output
+   */
+  planChange(): void {
+    super.planChange();
+    const c_creeps = this.planCreeps;
+    c_creeps.forEach((c_creep) => {
+      c_creep.creep.memory.carrier.input = this.input;
+      c_creep.creep.memory.carrier.output = this.output;
+    });
   }
 
   doTask(): void {

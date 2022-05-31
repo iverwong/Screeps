@@ -84,7 +84,7 @@ class Miner_MineState extends CreepState {
     const position = new RoomPosition(
       creep.memory.miner.positionX,
       creep.memory.miner.positionY,
-      creep.room.name
+      creep.memory.miner.positionRoom
     );
 
     if (!creep.pos.isEqualTo(position)) {

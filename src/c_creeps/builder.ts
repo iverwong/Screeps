@@ -101,10 +101,15 @@ class Builder_TaskState extends CreepState {
     }
 
     // 执行任务
+    // TODO 考虑墙和堡垒的情况
     if (taskStructure instanceof Structure) {
       // 如果为建筑物，前往修理
       if (creep.repair(taskStructure) === ERR_NOT_IN_RANGE) {
         creep.moveTo(taskStructure);
+      }
+      // 如果建筑物血量已到达0.95以上，则转到下一个任务
+      if (taskStructure.hits >= taskStructure.hitsMax * 0.95) {
+        creep.memory.builder.task = null;
       }
     } else {
       // 不为建筑物，则为工地

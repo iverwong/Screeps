@@ -65,9 +65,9 @@ export default class Carrier extends C_Creep {
         const towers = GlobalContext.getTowers(creep.room);
         if (towers.length !== 0) {
           const tower = towers.filter((tower) => {
-            return tower.store.getFreeCapacity() !== 0;
+            return tower.store.getFreeCapacity(RESOURCE_ENERGY) !== 0;
           })[0];
-          return new Carrier_FillState(this, tower);
+          if (tower) return new Carrier_FillState(this, tower);
         }
 
         if (creep.room.energyCapacityAvailable !== creep.room.energyAvailable) {

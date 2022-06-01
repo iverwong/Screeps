@@ -99,4 +99,5 @@ export const loop = errorMapper(() => {
   // Creep被动召回更新
   targetManager.add(new PassiveRenew("renew", [spawn]));
   targetManager.go();
+  console.log(Game.creeps["carrier38690619"].memory.carrier.state);
 });

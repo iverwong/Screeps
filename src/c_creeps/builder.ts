@@ -88,20 +88,29 @@ class Builder_TaskState extends CreepState {
   doWork(): void {
     // 获取任务
     const creep = this.c_creep.creep;
-    const task = creep.memory.builder.task;
+    const memoryTask = creep.memory.builder.task;
     let taskStructure: Structure | ConstructionSite;
-    if (task) {
-      taskStructure = Game.getObjectById(task);
+
+    if (memoryTask) {
+      // 如果memory中有任务，则获取任务
+      taskStructure = Game.getObjectById(memoryTask);
     } else {
-      const task = TaskManager.getTask(creep.room);
-      creep.memory.builder.task = task;
+      // 先获取维修任务，再获取建造任务
+      let task = TaskManager.getRepairTask(creep.room);
+      if (task) {
+        // 如果有维修任务，则记录任务
+        creep.memory.builder.task = task;
+      } else {
+        // 否则获取建造任务
+        task = TaskManager.getBuildTask(creep.room);
+        creep.memory.builder.task = task;
+      }
       if (task) {
         taskStructure = Game.getObjectById(task) as Structure;
       } else return;
     }
 
     // 执行任务
-    // TODO 考虑墙和堡垒的情况
     if (taskStructure instanceof Structure) {
       // 如果为建筑物，前往修理
       if (creep.repair(taskStructure) === ERR_NOT_IN_RANGE) {

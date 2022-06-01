@@ -9,7 +9,9 @@ interface Game {
  * 提供RoomMemory的接口支持
  */
 interface RoomMemory {
-  tasks: string[];
+  buildTasks: string[];
+  repairTasks: string[];
+  attackTarget: string[];
 }
 
 /**

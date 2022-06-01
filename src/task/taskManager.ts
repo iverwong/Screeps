@@ -8,32 +8,55 @@ export default class TaskManager {
   /**
    * 需要建造和维修的任务
    */
-  task: string[];
+  buildTasks: string[];
+
+  /**
+   * 需要维修的任务
+   */
+  repairTasks: string[];
+
+  /**
+   * 需要攻击的对象
+   */
+  attackTarget: string[];
 
   constructor(room: Room) {
     this.room = room;
     // 获取该游戏时间，每100个ticks更新任务
     if (Game.time % 100 === 0) {
-      // 清空现有任务
-      this.task = [];
-      this.checkPublish();
-      this.room.memory.tasks = this.task;
+      // 清空现有任务，并发布新任务
+      this.buildTasks = [];
+      this.buildTasksPublish();
+      this.repairTasks = [];
+      this.repairTasksPublish();
+      this.room.memory.buildTasks = this.buildTasks;
+      this.room.memory.repairTasks = this.repairTasks;
+    }
+    // 每10个ticks更新攻击任务
+    if (Game.time % 10 === 0) {
+      this.attackTarget = [];
+      this.attackTargetPublish();
     }
   }
 
   /**
    * 寻找所有需要修缮的城墙和建筑，建筑将会优先修缮，然后是工地
    */
-  checkPublish() {
-    const structures = this.room.find(FIND_STRUCTURES);
-    const myStructures = this.room.find(FIND_MY_STRUCTURES);
+  buildTasksPublish() {
     const constructionSite = this.room.find(FIND_MY_CONSTRUCTION_SITES);
 
     // 遍历每个建筑工地
     constructionSite.forEach((each) => {
-      this.task.push(each.id);
+      this.buildTasks.push(each.id);
     });
+  }
 
+  /**
+   * 寻找所有需要维修的对象
+   */
+  repairTasksPublish() {
+    const structures = this.room.find(FIND_STRUCTURES);
+    const myStructures = this.room.find(FIND_MY_STRUCTURES);
     // 遍历每一个container和road
     structures.forEach((structure) => {
       if (
@@ -41,7 +64,7 @@ export default class TaskManager {
           structure.structureType === STRUCTURE_ROAD) &&
         structure.hits / structure.hitsMax < 0.5
       ) {
-        this.task.push(structure.id);
+        this.buildTasks.push(structure.id);
       }
     });
 
@@ -49,19 +72,63 @@ export default class TaskManager {
     myStructures.forEach((structure) => {
       // 如果血量低于
       if (structure.hits / structure.hitsMax < 0.5) {
-        this.task.push(structure.id);
+        this.buildTasks.push(structure.id);
       }
     });
   }
 
   /**
-   * 获取一个任务
+   * 寻找包含攻击模块的敌人
+   */
+  attackTargetPublish() {
+    const targets = this.room.find(FIND_HOSTILE_CREEPS, {
+      filter: (creep) => {
+        const bodys = creep.body;
+        const target = bodys.filter((body) => {
+          body.type === ATTACK ||
+            RANGED_ATTACK ||
+            ATTACK_POWER ||
+            RANGED_ATTACK_POWER;
+        });
+        if (target.length > 0) {
+          return true;
+        }
+        return false;
+      },
+    });
+    targets.forEach((target) => {
+      this.attackTarget.push(target.id);
+    });
+  }
+
+  /**
+   * 获取一个建造任务
    * @returns 返回需要处理的对象id
    */
-  static getTask(room: Room) {
-    const tasks = room.memory.tasks;
+  static getBuildTask(room: Room) {
+    const tasks = room.memory.buildTasks;
     const task = tasks.pop();
-    room.memory.tasks = tasks;
+    room.memory.buildTasks = tasks;
+    return task;
+  }
+
+  /**
+   * 获取一个维修任务
+   */
+  static getRepairTask(room: Room) {
+    const tasks = room.memory.repairTasks;
+    const task = tasks.pop();
+    room.memory.repairTasks = tasks;
+    return task;
+  }
+
+  /**
+   * 获取一个攻击目标
+   */
+  static getAttackTarget(room: Room) {
+    const tasks = room.memory.attackTarget;
+    const task = tasks.pop();
+    room.memory.attackTarget = tasks;
     return task;
   }
 }

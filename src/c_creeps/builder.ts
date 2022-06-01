@@ -119,14 +119,6 @@ class Builder_TaskState extends CreepState {
       // 修建完成则转到下个任务
       if (!taskStructure) creep.memory.builder.task = null;
     }
-    // 无论如何，顺便维修道路
-    const roads = creep.pos.findInRange(FIND_STRUCTURES, 1, {
-      filter: (structure) => {
-        structure.structureType === STRUCTURE_ROAD &&
-          structure.hits / structure.hitsMax < 0.5;
-      },
-    });
-    creep.repair(roads[0]);
   }
   getEnum(): number {
     return BuilderStateEnum.TASK;

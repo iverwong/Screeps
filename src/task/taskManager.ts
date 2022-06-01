@@ -22,7 +22,8 @@ export default class TaskManager {
    * 寻找所有需要修缮的城墙和建筑，建筑将会优先修缮，然后是工地
    */
   checkPublish() {
-    const structures = this.room.find(FIND_MY_STRUCTURES);
+    const structures = this.room.find(FIND_STRUCTURES);
+    const myStructures = this.room.find(FIND_MY_STRUCTURES);
     const constructionSite = this.room.find(FIND_MY_CONSTRUCTION_SITES);
 
     // 遍历每个建筑工地
@@ -30,8 +31,19 @@ export default class TaskManager {
       this.task.push(each.id);
     });
 
-    // 遍历每个建筑
+    // 遍历每一个container和road
     structures.forEach((structure) => {
+      if (
+        structure.structureType === STRUCTURE_CONTAINER ||
+        (structure.structureType === STRUCTURE_ROAD &&
+          structure.hits / structure.hitsMax < 0.5)
+      ) {
+        this.task.push(structure.id);
+      }
+    });
+
+    // 遍历每个建筑
+    myStructures.forEach((structure) => {
       // 如果血量低于
       if (structure.hits / structure.hitsMax < 0.5) {
         this.task.push(structure.id);

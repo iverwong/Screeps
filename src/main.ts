@@ -95,7 +95,7 @@ export const loop = errorMapper(() => {
         new RoomPosition(28, 25, "E13S46")
       )
     )
-    .add(new HoldBuilder("bu1", spawn, 4, "6295e6770ee6fc521ea5a552"));
+    .add(new HoldBuilder("bu1", spawn, 2, "6295e6770ee6fc521ea5a552"));
   // Creep被动召回更新
   targetManager.add(new PassiveRenew("renew", [spawn]));
   targetManager.go();

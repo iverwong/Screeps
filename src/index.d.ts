@@ -76,6 +76,10 @@ interface CreepMemory {
      * 当前状态机的状态编号，通过矿工状态机编号，反向映射到状态机枚举
      */
     state: number;
+    /**
+     * 是否存在需要填充的目标
+     */
+    fillTarget?: string;
   };
   /**
    * 升级的相关信息

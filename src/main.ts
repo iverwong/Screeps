@@ -9,6 +9,7 @@ import {
 } from "./target/holdCreep";
 import { PassiveRenew } from "./target/renewCreep";
 import GlobalContext from "./global/context";
+import { TowerStrategy } from "./target/tower";
 
 // 游戏入口函数
 export const loop = errorMapper(() => {
@@ -79,6 +80,9 @@ export const loop = errorMapper(() => {
     )
     .add(new HoldBuilder("bu1", spawn, 1, "6295e6770ee6fc521ea5a552", 8, 4, 4))
     .add(new HoldBuilder("bu2", spawn, 1, "6295e6770ee6fc521ea5a552", 6, 3, 3));
+  // 塔策略
+  targetManager.add(new TowerStrategy("att", ["6296ec964d1dab87d4d302e3"]));
+
   // Creep被动召回更新
   targetManager.add(new PassiveRenew("renew", [spawn]));
   targetManager.go();

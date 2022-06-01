@@ -5,6 +5,9 @@
 
 export default class TaskManager {
   room: Room;
+  /**
+   * 需要建造和维修的任务
+   */
   task: string[];
 
   constructor(room: Room) {
@@ -34,9 +37,9 @@ export default class TaskManager {
     // 遍历每一个container和road
     structures.forEach((structure) => {
       if (
-        structure.structureType === STRUCTURE_CONTAINER ||
-        (structure.structureType === STRUCTURE_ROAD &&
-          structure.hits / structure.hitsMax < 0.5)
+        (structure.structureType === STRUCTURE_CONTAINER ||
+          structure.structureType === STRUCTURE_ROAD) &&
+        structure.hits / structure.hitsMax < 0.5
       ) {
         this.task.push(structure.id);
       }

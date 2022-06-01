@@ -36,6 +36,7 @@ export default class TaskManager {
     if (Game.time % 10 === 0) {
       this.attackTarget = [];
       this.attackTargetPublish();
+      this.room.memory.attackTarget = this.attackTarget;
     }
   }
 

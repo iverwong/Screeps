@@ -84,6 +84,8 @@ export const loop = errorMapper(() => {
   targetManager.add(new TowerStrategy("att", ["6296ec964d1dab87d4d302e3"]));
 
   // Creep被动召回更新
-  targetManager.add(new PassiveRenew("renew", [spawn]));
+  targetManager.add(
+    new PassiveRenew("renew", [spawn], undefined, undefined, 9)
+  );
   targetManager.go();
 });

@@ -18,7 +18,7 @@ export class PassiveRenew extends Target {
    * @param spawns 该房间中哪些孵化器受影响，默认为房间内所有的孵化器
    * @param higherThreshold 该阈值表示低于或等于该阈值且临近的Creep将被更新，默认为1200
    * @param lowerThreshold 该阈值表示低于或等于该阈值的Creep将等待被更新，即便该Spawn没有足够的能量或正在孵化中，默认为200
-   * @param lowerRange 表示等待更新的范围，即如果Spawn周边范围内有低于或等于lowerThreshold的Creep，则主动将该Creep找回到Spawn身边，完成更新
+   * @param lowerRange 表示等待更新的范围，即如果Spawn周边范围内有低于或等于lowerThreshold的Creep，则主动将该Creep找回到Spawn身边，完成更新，默认为8
    * @param targetCreep 目标Creep，默认为所有非“outOfPlan”且没有状态的Creep，该值接收一个函数，通过布尔值确定该Creep应不应该被升级
    * 同时，以下工人类型将自行主动更新：Miner
    */

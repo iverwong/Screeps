@@ -27,9 +27,10 @@ export default class Miner extends C_Creep {
         /**
          * 挖矿状态
          *
-         * 当矿被挖空或自身生命不足时，切换到renew状态
+         * 当矿被挖空或自身生命不足时，检查是否已完成Renew，如已完成，则切换回Mine，否则切换到Renew
          */
         if (freeSource === 0 || creep.ticksToLive < 200) {
+          if (creep.ticksToLive >= 1200) return this.state;
           return new Miner_RenewState(this);
         }
         return this.state;

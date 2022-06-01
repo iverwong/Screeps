@@ -10,12 +10,6 @@ export default class Carrier extends C_Creep {
 
   changeState(): CreepState {
     const creep = this.creep;
-    const inputStructure = Game.getObjectById(
-      this.creep.memory.carrier.input
-    ) as Structure;
-    const outputStructure = Game.getObjectById(
-      this.creep.memory.carrier.output
-    ) as Structure;
     const freeCapacity = creep.store.getFreeCapacity(RESOURCE_ENERGY);
     const usedCapacity = creep.store.getUsedCapacity(RESOURCE_ENERGY);
 
@@ -47,7 +41,9 @@ export default class Carrier extends C_Creep {
         if (usedCapacity === 0) {
           return new Carrier_GetState(this);
         } else {
-          if (creep.room.energyAvailable === creep.room.energyAvailable) {
+          if (
+            creep.room.energyAvailable === creep.room.energyCapacityAvailable
+          ) {
             return new Carrier_CarryState(this);
           }
         }

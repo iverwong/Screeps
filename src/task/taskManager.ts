@@ -9,8 +9,8 @@ export default class TaskManager {
 
   constructor(room: Room) {
     this.room = room;
-    // 获取该游戏时间，每10个ticks更新任务
-    if (Game.time % 10 === 0) {
+    // 获取该游戏时间，每100个ticks更新任务
+    if (Game.time % 100 === 0) {
       // 清空现有任务
       this.task = [];
       this.checkPublish();

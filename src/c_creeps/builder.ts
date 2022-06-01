@@ -116,6 +116,8 @@ class Builder_TaskState extends CreepState {
       if (creep.build(taskStructure) === ERR_NOT_IN_RANGE) {
         creep.moveTo(taskStructure);
       }
+      // 修建完成则转到下个任务
+      if (!taskStructure) creep.memory.builder.task = null;
     }
     // 无论如何，顺便维修道路
     const roads = creep.pos.findInRange(FIND_STRUCTURES, 1, {

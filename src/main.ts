@@ -16,7 +16,7 @@ export const loop = errorMapper(() => {
   const globalContext = new GlobalContext();
 
   // 房间E13S46
-  const targetManager = new TargetManager(Game.rooms["E13S46"]);
+  const targetManager = new TargetManager(Game.rooms["E13S46"], 1000000);
 
   // 记录矿点
   const topRightSource = Game.getObjectById(

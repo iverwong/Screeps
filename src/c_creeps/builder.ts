@@ -116,8 +116,14 @@ class Builder_TaskState extends CreepState {
       if (creep.repair(taskStructure) === ERR_NOT_IN_RANGE) {
         creep.moveTo(taskStructure);
       }
-      // 如果建筑物血量已到达0.95以上，则转到下一个任务
-      if (taskStructure.hits >= taskStructure.hitsMax * 0.95) {
+      // 如果是堡垒，则按照指定血量维修
+      if (taskStructure.structureType === STRUCTURE_RAMPART) {
+        if (taskStructure.hits >= creep.room.memory.rampart) {
+          creep.memory.builder.task = null;
+        }
+      }
+      // 如果是其他建筑物，血量已到达0.95以上，则转到下一个任务
+      else if (taskStructure.hits >= taskStructure.hitsMax * 0.95) {
         creep.memory.builder.task = null;
       }
     } else {

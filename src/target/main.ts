@@ -14,10 +14,12 @@ export default class TargetManager {
    * 目标管理器，对任务计划进行管理
    * @param room 房间
    */
-  constructor(room: Room) {
+  constructor(room: Room, rampartHits: number) {
     this.room = room;
     this.creepManager = new CreepManager(room);
     this.taskManager = new TaskManager(room);
+    // 设定Rampart血量
+    this.room.memory.rampart = rampartHits;
   }
 
   /**

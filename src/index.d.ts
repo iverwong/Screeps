@@ -16,6 +16,10 @@ interface RoomMemory {
    * 记录塔的目标对象
    */
   towerTarget: { [planName: string]: string };
+  /**
+   * 记录需要维持的堡垒血量
+   */
+  rampart: number;
 }
 
 /**

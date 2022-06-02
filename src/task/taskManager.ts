@@ -33,6 +33,7 @@ export default class TaskManager {
       this.room.memory.repairTasks = this.repairTasks;
     }
 
+    // 每5ticks更新攻击目标
     if (Game.time % 5 === 0) {
       this.attackTarget = [];
       this.attackTargetPublish();
@@ -71,8 +72,16 @@ export default class TaskManager {
 
     // 遍历每个建筑
     myStructures.forEach((structure) => {
-      // 如果血量低于
-      if (structure.hits / structure.hitsMax < 0.5) {
+      // 如果是Rampart且血量低于预设
+      if (
+        structure.structureType === STRUCTURE_RAMPART &&
+        structure.hits <= structure.room.memory.rampart
+      ) {
+        this.buildTasks.push(structure.id);
+      }
+
+      // 如果是其他类型的建筑，血量低于0.5进行维修
+      else if (structure.hits / structure.hitsMax < 0.5) {
         this.buildTasks.push(structure.id);
       }
     });

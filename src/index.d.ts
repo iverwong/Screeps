@@ -12,6 +12,10 @@ interface RoomMemory {
   buildTasks: string[];
   repairTasks: string[];
   attackTarget: string[];
+  /**
+   * 记录塔的目标对象
+   */
+  towerTarget: { [planName: string]: string };
 }
 
 /**

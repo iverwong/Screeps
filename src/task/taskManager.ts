@@ -22,8 +22,8 @@ export default class TaskManager {
 
   constructor(room: Room) {
     this.room = room;
-    // 获取该游戏时间，每100个ticks更新任务
-    if (Game.time % 100 === 0) {
+    // 获取该游戏时间，每20个ticks更新任务
+    if (Game.time % 20 === 0) {
       // 清空现有任务，并发布新任务
       this.buildTasks = [];
       this.buildTasksPublish();
@@ -32,8 +32,8 @@ export default class TaskManager {
       this.room.memory.buildTasks = this.buildTasks;
       this.room.memory.repairTasks = this.repairTasks;
     }
-    // 每10个ticks更新攻击任务
-    if (Game.time % 10 === 0) {
+
+    if (Game.time % 5 === 0) {
       this.attackTarget = [];
       this.attackTargetPublish();
       this.room.memory.attackTarget = this.attackTarget;
@@ -86,10 +86,13 @@ export default class TaskManager {
       filter: (creep) => {
         const bodys = creep.body;
         const target = bodys.filter((body) => {
-          body.type === ATTACK ||
+          const type = body.type;
+          return (
+            type === ATTACK ||
             RANGED_ATTACK ||
             ATTACK_POWER ||
-            RANGED_ATTACK_POWER;
+            RANGED_ATTACK_POWER
+          );
         });
         if (target.length > 0) {
           return true;

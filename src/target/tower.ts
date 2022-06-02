@@ -26,13 +26,26 @@ export class TowerStrategy extends Target {
   }
   planChange(): void {}
   doTask(): void {
-    // 获取攻击任务
-    const targetId = TaskManager.getAttackTarget(this.room);
-    if (targetId) {
-      this.towers.forEach((tower) =>
-        tower.attack(Game.getObjectById(targetId))
-      );
+    if (!this.room.memory.towerTarget) {
+      this.room.memory.towerTarget = {};
     }
-    // 暂不考虑维修的问题
+    // 获取攻击任务
+    let targetId = this.room.memory.towerTarget[this.plan];
+    if (!targetId) {
+      targetId = TaskManager.getAttackTarget(this.room);
+    }
+    if (targetId) {
+      const target = Game.getObjectById(targetId);
+      if (target) {
+        // 存入内存
+        this.room.memory.towerTarget[this.plan] = targetId;
+        this.towers.forEach((tower) => {
+          tower.attack(target);
+        });
+      } else {
+        // 无目标，清空plan
+        this.room.memory.towerTarget[this.plan] = null;
+      }
+    }
   }
 }

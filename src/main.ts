@@ -57,7 +57,7 @@ export const loop = errorMapper(() => {
         spawn,
         1,
         "62957b298e48e0be8991fdfb",
-        "6295e6770ee6fc521ea5a552"
+        "629773b51937aa4df8e4b14d"
       )
     )
     .add(
@@ -66,7 +66,16 @@ export const loop = errorMapper(() => {
         spawn,
         1,
         "62957b31f07f19994a2f6b14",
-        "6295e6770ee6fc521ea5a552"
+        "629773b51937aa4df8e4b14d"
+      )
+    )
+    .add(
+      new HoldCarrier(
+        "ca3",
+        spawn,
+        1,
+        "629773b51937aa4df8e4b14d",
+        "629766646c6a817d92f6888d"
       )
     )
     .add(
@@ -74,12 +83,23 @@ export const loop = errorMapper(() => {
         "up1",
         spawn,
         1,
-        "6295e6770ee6fc521ea5a552",
-        new RoomPosition(28, 26, "E13S46")
+        "629766646c6a817d92f6888d",
+        new RoomPosition(30, 25, "E13S46")
       )
     )
-    .add(new HoldBuilder("bu1", spawn, 1, "6295e6770ee6fc521ea5a552", 8, 4, 4))
-    .add(new HoldBuilder("bu2", spawn, 1, "6295e6770ee6fc521ea5a552", 6, 3, 3));
+    .add(
+      new HoldUpgrader(
+        "up2",
+        spawn,
+        1,
+        "629766646c6a817d92f6888d",
+        new RoomPosition(29, 25, "E13S46"),
+        4,
+        8
+      )
+    )
+    .add(new HoldBuilder("bu1", spawn, 1, "629773b51937aa4df8e4b14d", 8, 4, 4))
+    .add(new HoldBuilder("bu2", spawn, 1, "629773b51937aa4df8e4b14d", 6, 3, 3));
   // 塔策略
   targetManager.add(new TowerStrategy("att", ["6296ec964d1dab87d4d302e3"]));
 

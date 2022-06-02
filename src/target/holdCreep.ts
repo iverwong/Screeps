@@ -274,8 +274,8 @@ export class HoldUpgrader extends HoldTarget {
    * @param holdNumber 维持数量
    * @param input 能量来源
    * @param position 工作位置
-   * @param bodyMove move部件数量
-   * @param bodyWork work部件数量
+   * @param bodyMove move部件数量，默认为2
+   * @param bodyWork work部件数量，默认为4
    */
   constructor(
     plan: string,

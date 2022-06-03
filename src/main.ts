@@ -122,4 +122,5 @@ export const loop = errorMapper(() => {
     new PassiveRenew("renew", [spawn], undefined, undefined, 9)
   );
   targetManager.go();
+  console.log("@", Game.time);
 });

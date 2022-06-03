@@ -66,7 +66,8 @@ export const loop = errorMapper(() => {
         spawn,
         1,
         "62957b31f07f19994a2f6b14",
-        "629773b51937aa4df8e4b14d"
+        "629773b51937aa4df8e4b14d",
+        8
       )
     )
     .add(
@@ -84,7 +85,9 @@ export const loop = errorMapper(() => {
         spawn,
         1,
         "629766646c6a817d92f6888d",
-        new RoomPosition(30, 25, "E13S46")
+        new RoomPosition(31, 25, "E13S46"),
+        5,
+        10
       )
     )
     .add(
@@ -96,6 +99,17 @@ export const loop = errorMapper(() => {
         new RoomPosition(29, 25, "E13S46"),
         4,
         8
+      )
+    )
+    .add(
+      new HoldUpgrader(
+        "up3",
+        spawn,
+        1,
+        "629766646c6a817d92f6888d",
+        new RoomPosition(30, 25, "E13S46"),
+        5,
+        10
       )
     )
     .add(new HoldBuilder("bu1", spawn, 1, "629773b51937aa4df8e4b14d", 8, 4, 4))

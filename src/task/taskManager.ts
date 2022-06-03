@@ -20,6 +20,11 @@ export default class TaskManager {
    */
   attackTarget: string[];
 
+  /**
+   * 需要治疗的对象
+   */
+  healTarget: string[];
+
   constructor(room: Room) {
     this.room = room;
     // 获取该游戏时间，每20个ticks更新任务
@@ -38,6 +43,9 @@ export default class TaskManager {
       this.attackTarget = [];
       this.attackTargetPublish();
       this.room.memory.attackTarget = this.attackTarget;
+      this.healTarget = [];
+      this.healTargetPublish();
+      this.room.memory.healTarget = this.healTarget;
     }
   }
 
@@ -115,6 +123,20 @@ export default class TaskManager {
   }
 
   /**
+   * 获取生命值不满的本方Creep
+   */
+  healTargetPublish() {
+    const targets = this.room.find(FIND_MY_CREEPS, {
+      filter: (creep) => {
+        return creep.hits < creep.hitsMax;
+      },
+    });
+    targets.forEach((target) => {
+      this.healTarget.push(target.id);
+    });
+  }
+
+  /**
    * 获取一个建造任务
    * @returns 返回需要处理的对象id
    */
@@ -142,6 +164,16 @@ export default class TaskManager {
     const tasks = room.memory.attackTarget;
     const task = tasks.pop();
     room.memory.attackTarget = tasks;
+    return task;
+  }
+
+  /**
+   * 获取一个治疗目标
+   */
+  static getHealTarget(room: Room) {
+    const tasks = room.memory.healTarget;
+    const task = tasks.pop();
+    room.memory.healTarget = tasks;
     return task;
   }
 }

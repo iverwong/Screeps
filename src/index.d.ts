@@ -12,6 +12,7 @@ interface RoomMemory {
   buildTasks: string[];
   repairTasks: string[];
   attackTarget: string[];
+  healTarget: string[];
   /**
    * 记录塔的目标对象
    */
